@@ -1,0 +1,6 @@
+uvicorn main:app --reload - bu kod ile virtual server a bağlandık
+-Fastapi, girilen ilk path operasyonunu yakalar ve onu çalışırdıktan sonra durur
+-pydentic kütüphanesi Fastapi içinde otomatik yüklendi, Fastapi ile alakası yok ayrı olarakda yüklenir, 
+pydentic ile api şeması yani datanın bize bize nasıl ulaştırılacağını belirleriz. örn: str tipinde datanın döneceğini yazdık,
+fakat integer girildi Fastapi integer ı str ye dönüştürür
+-her yeni klasör oluşturulduğunda paket olarak tanımlanması için içerisine __init__.py isimle bir dosya açmak zorunlu
