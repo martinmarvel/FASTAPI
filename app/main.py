@@ -103,4 +103,3 @@ def updatePost(id: int, post:Post):
     postDict["id"] = id
     myPosts[index1] = postDict
     return {"mesaj":postDict}
-print()
