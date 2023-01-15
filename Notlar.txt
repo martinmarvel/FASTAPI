@@ -1,6 +1,21 @@
-uvicorn main:app --reload - bu kod ile virtual server a bağlandık
+uvicorn app.main:app --reload - bu kod ile virtual server a bağlandık
 -Fastapi, girilen ilk path operasyonunu yakalar ve onu çalışırdıktan sonra durur
 -pydentic kütüphanesi Fastapi içinde otomatik yüklendi, Fastapi ile alakası yok ayrı olarakda yüklenir, 
 pydentic ile api şeması yani datanın bize bize nasıl ulaştırılacağını belirleriz. örn: str tipinde datanın döneceğini yazdık,
 fakat integer girildi Fastapi integer ı str ye dönüştürür
+
 -her yeni klasör oluşturulduğunda paket olarak tanımlanması için içerisine __init__.py isimle bir dosya açmak zorunlu
+-conda install -c anaconda psycopg2-binary veri tabanı eklendi
+
+-ORM object relationla mapper; vt ve bizim aramızda duran soyut bir katmandır, geleneksel python kodu ile vt operasyonlarını yazmamızı sağlar
+SQL e gerek kalmaz, tobloları manuel olarak yazmamıza gerek kalmaz, sorgular python kodu ile yazılabilir.
+ORM çeşitleri arasında SQLAlchemy meşhurdur, fastapi ile alakası yok ayrı bir kütüphanedir.
+SQLAlchemy vt nı ile nasıl iletişim kuracağını bilmez oyüzden alt katman olarakda driver yüklemek gerekir, bizim kullandığımız psycopg2-binary
+diğer ORM ler içinde aynı şey geçerli
+
+-models.py diye oluşan dosya aslında vt nındaki tablo ları temsil eder
+
+-pydentic ve SQLAlchemy model farkları; pydentic te hem sorguda hem sorgunun cevabında modeli biz belirleriz, hangi alanların gönder-
+rilmesi ya da geri dönmesini belirleyebiliriz. SQLAlchemy ise table ın kolonlarını belirleriz, crud operasyonlarını yönetiriz
+
+-pip install "passlib[bcrypt]" şifre kriptolama yüklendi
