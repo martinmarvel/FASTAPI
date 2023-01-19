@@ -1,9 +1,11 @@
 
+
 from .. import models, schemas, oauth2
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from ..database import get_db
 from sqlalchemy.orm import Session
 from typing import List, Optional
+from sqlalchemy import func #COUNT gibi sql (sqlalchemy fonks. import eder)
 
 
 router = APIRouter(
@@ -11,12 +13,16 @@ router = APIRouter(
     tags=['posts']
 )
 
-
-@router.get("/", response_model=List[schemas.RestrictCreateResponsePost])
-def getPosts(db: Session = Depends(get_db), skip:int=0, limit: int = 10, search:Optional[str]="" ):#fastapi de query parametrelerine örn:limit de olduğu gibi ulaşırız
+#@router.get("/", response_model=List[schemas.PostOut]) validation kullanamadık bug var
+@router.get("/", response_model=List[schemas.PostOut])
+def getPosts(db: Session = Depends(get_db), limit: int = 10, skip:int=0,  search:Optional[str]="" ):#fastapi de query parametrelerine örn:limit de olduğu gibi ulaşırız
     print(limit,skip)
-    posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).all()
-    return posts
+    #posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
+    
+    postResults = db.query(models.Post, func.count(models.Vote.post_id).label('Votes')).join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True).group_by(models.Post.id).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
+    
+    
+    return postResults
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.RestrictCreateResponsePost)
