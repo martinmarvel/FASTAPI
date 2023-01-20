@@ -19,3 +19,22 @@ diğer ORM ler içinde aynı şey geçerli
 rilmesi ya da geri dönmesini belirleyebiliriz. SQLAlchemy ise table ın kolonlarını belirleriz, crud operasyonlarını yönetiriz
 
 -pip install "passlib[bcrypt]" şifre kriptolama yüklendi
+
+-NOT!! sql table ları değiştirmeye müsade etmez yeni kolon ekle çıkara izin vermez, bunu yapmak için database migration tool a ihtiyaç var
+bu toolun adi Alembic, kullanmak için  conda install -c conda-forge alembic -> initialize alembic init alembic, daha sonra alembic klasörü 
+içindeki env.py içine models.py de bulunan Base i import ediyoruz (bu import sqlalchemydeki bütün models ı bize verir)
+-> alembic.ini içinde (sqlalchemy.url = dripostgresql:+psycopg2-binary==2.9.5://postgress:258369@localhost:5432/fastapi) fakat onu override
+etmemiz lazım -> alembic dosyası içinde env.py içinde(config.set_main_option("sqlalchemy.url", 'postgresql:+psycopg2-binary==2.9.5://postgress:258369@localhost:5432/fastapi'))
+-> aynı dosya içine from app.config import setting({settings.DATABASE_USERNAME}:{settings.DATABASE_PASSWORD}@{settings.DATABASE_HOSTNAME}:{settings.DATABASE_PORT}/{settings.DATABASE_NAME}')
+-> alembic ile db table ları oluşturmaya başladık alembic revision -m "create posts table" (revision db de yaptığımız değişiklikleri tek tek kontrole eder, saonrası ise 
+eklmeler yapar ) , bu operasyonları yopmak için ->alembic/versions altında bir önceki komut ile oluşan karışık rakamlı dosya içine,
+upgrade() ve downgrade operasyonları girildi, bunları işlemek için -> alembic upgrade 491d546336e5(revision id)
+->alembic revision --autogenerate -m "auto generate" (models.py içindeki vt tablolarını otomatik olarak aldı,
+ böylelikle artık vt tablo modelinde yapılan değişiklikler otomatik olarak eklenir )
+
+
+NOT!! chrome üzerinden console dan apimize istek atabiliriz (fetch('http://localhost:8000/').then(res -> res.json().then(console.log))
+NOT!! yüklü paketleri başkalarının kullanımına açmak için pip freeze > requirements.txt ye atabiliriz, kullanmak
+isteyenler pip install -r requirements.txt 
+
+
