@@ -12,7 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 #models.Base.metadata.create_all(bind=engine) alembic devreye girdiği için ihtiyacımız yok
 
-origins = ["*"]
+origins = ["*"]#dışarıdan apimize bağlanmalarına izin veririz
 
 app = FastAPI()
 app.add_middleware(
