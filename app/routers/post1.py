@@ -16,7 +16,7 @@ router = APIRouter(
 #@router.get("/", response_model=List[schemas.PostOut]) validation kullanamadık bug var
 @router.get("/", response_model=List[schemas.PostOut])
 def getPosts(db: Session = Depends(get_db), limit: int = 10, skip:int=0,  search:Optional[str]="" ):#fastapi de query parametrelerine örn:limit de olduğu gibi ulaşırız
-    print(limit,skip)
+    
     #posts = db.query(models.Post).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
     
     postResults = db.query(models.Post, func.count(models.Vote.post_id).label('Votes')).join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True).group_by(models.Post.id).filter(models.Post.title.contains(search)).limit(limit).offset(skip).all()
@@ -36,10 +36,13 @@ def createPost(post: schemas.PostCreate, db: Session = Depends(get_db), currentU
     return newPost
 
 
-@router.get("/{id}", response_model=schemas.RestrictCreateResponsePost)
+@router.get("/{id}", response_model=schemas.PostOut)
 def getPost(id: int, db: Session = Depends(get_db)):
 
-    post = db.query(models.Post).filter(models.Post.id == id).first()
+    #post = db.query(models.Post).filter(models.Post.id == id).first()
+
+    post =  db.query(models.Post, func.count(models.Vote.post_id).label('Votes')
+    ).join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True).group_by(models.Post.id).first()
 
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,

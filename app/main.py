@@ -1,18 +1,27 @@
 
 from fastapi import FastAPI
 from .routers import post1, user, auth, vote
-from . import models
-from .database import engine
+#from . import models
+
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
 
 
 
-models.Base.metadata.create_all(bind=engine)
+#models.Base.metadata.create_all(bind=engine) alembic devreye girdiği için ihtiyacımız yok
 
+origins = ["*"]
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,#her istekden önce çalışan fonks.
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app.include_router(post1.router)
